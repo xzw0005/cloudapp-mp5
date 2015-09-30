@@ -29,7 +29,7 @@ public final class RandomForestMP {
 			}
 			return new LabeledPoint(label, Vectors.dense(point));
 		}
-	}*/
+	}
 	// END EXTRA TODO
 
     public static void main(String[] args) {
@@ -74,6 +74,6 @@ public final class RandomForestMP {
         results.saveAsTextFile(results_path);
 
         sc.stop();
-    }
+    } */
 
 }
