@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public final class RandomForestMP {
 	
 	// EXTRA TODO: We need to implement Parsing class
-	private static class DataToPoint implements Function<String, LabeledPoint> {
+	/*private static class DataToPoint implements Function<String, LabeledPoint> {
 		private static final Pattern SPACE = Pattern.compile(",");
 		
 		public LabeledPoint call(String line) throws Exception {
@@ -29,7 +29,7 @@ public final class RandomForestMP {
 			}
 			return new LabeledPoint(label, Vectors.dense(point));
 		}
-	}
+	}*/
 	// END EXTRA TODO
 
     public static void main(String[] args) {
