@@ -47,7 +47,7 @@ public final class KMeansMP {
 			this.model = model;
 		}
 		
-		public Tuple2<Integer, String> cal(Tuple2<String, Vector> args) {
+		public Tuple2<Integer, String> call(Tuple2<String, Vector> args) {
 			String title = args._1();
 			Vector point = args._2();
 			int cluster = model.predict(point);

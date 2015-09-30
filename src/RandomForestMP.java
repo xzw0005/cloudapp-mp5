@@ -59,7 +59,7 @@ public final class RandomForestMP {
 		JavaRDD<LabeledPoint> training = sc.textFile(training_data_path).map(new DataToPoint());
 		JavaRDD<LabeledPoint> test = sc.textFile(test_data_path).map(new DataToPoint());
 		
-		model = RandomForest.trainClassifier(train, numClasses, categoricalFeaturesInfo, 
+		model = RandomForest.trainClassifier(training, numClasses, categoricalFeaturesInfo, 
 											numTrees, featureSubsetStrategy, impurity, 
 											maxDepth, maxBins, seed);
 		
