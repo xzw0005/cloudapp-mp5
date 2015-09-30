@@ -40,6 +40,20 @@ public final class KMeansMP {
 		}
 	}
 	
+	private static class WriteCluster implements VoidFunction<Tuple2<Integer, Iterable<String>>> {
+		private KMeansModel model;
+		public WriteCluster(KMeansModel model) {
+			this.model = model;
+		}
+		public void call(Tuple2<Integer, Iterable<String>>Cars) throws Exception {
+			String ret = "[";
+			for (String car : Cars._2()) {
+				ret += car + ",";
+			}
+			return ret + "]";
+		}
+	}
+	
 	private static class ClusterCars implements PairFunction<Tuple2<String, Vector>, Integer, String> {
 		private KMeansModel model;
 		
@@ -82,7 +96,8 @@ public final class KMeansMP {
 		
 		model = KMeans.train(points.rdd(), k, iterations, runs, KMeans.RANDOM(), seed);
 		
-		results = titles.zip(points).mapToPair(new ClusterCars(model)).groupByKey();
+		JavaPairRDD<Integer, Iterable<String>> cao = titles.zip(points).mapToPair(new ClusterCars(model)).groupByKey();
+		results = cao.foreach(new WriteCluster(model));
 		//END TODO
 
         results.saveAsTextFile(results_path);
