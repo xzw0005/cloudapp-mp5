@@ -15,6 +15,22 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public final class RandomForestMP {
+	
+	// EXTRA TODO: We need to implement Parsing class
+	private static class DataToPoint implements Function<String, LabeledPoint> {
+		private static final Pattern SPACE = Pattern.compile(",");
+		
+		public LabeledPoint call(String line) throws Exception {
+			String[] token = SPACE.split(line);
+			double label = Double.parseDouble(token[token.length - 1]);
+			double[] point = new double[token.length - 1];
+			for (int i = 0; i < token.length - 1; ++i) {
+				point[i] = Double.parseDouble(token[i]);
+			}
+			return new LabeledPoint(label, Vectors.dense(point));
+		}
+	}
+	// END EXTRA TODO
 
     public static void main(String[] args) {
         if (args.length < 3) {
@@ -40,6 +56,14 @@ public final class RandomForestMP {
         Integer seed = 12345;
 
 		// TODO
+		JavaRDD<LabeledPoint> training = sc.textFile(training_data_path).map(new DataToPoint());
+		JavaRDD<LabeledPoint> test = sc.textFile(test_data_path).map(new DataToPoint());
+		
+		model = RandomForest.trainClassifier(train, numClasses, categoricalFeaturesInfo, 
+											numTrees, featureSubsetStrategy, impurity, 
+											maxDepth, maxBins, seed);
+		
+		// END TODO
 
         JavaRDD<LabeledPoint> results = test.map(new Function<Vector, LabeledPoint>() {
             public LabeledPoint call(Vector points) {
