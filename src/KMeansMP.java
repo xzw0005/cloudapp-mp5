@@ -45,7 +45,7 @@ public final class KMeansMP {
 		public WriteCluster(KMeansModel model) {
 			this.model = model;
 		}
-		public void call(Tuple2<Integer, Iterable<String>>Cars) throws Exception {
+		public String call(Tuple2<Integer, Iterable<String>>Cars) throws Exception {
 			String ret = "[";
 			for (String car : Cars._2()) {
 				ret += car + ",";
