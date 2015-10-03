@@ -32,7 +32,18 @@ public final class RandomForestMP {
 		}
 	}
 	// Test data requires to be type of Vector, thus implement DataToFeatureVector
-	
+	private static class DataToFeatureVector implements Function<String, Vector> {
+		private static final Pattern SPACE = Pattern.compile(",");
+		
+		public Vector call(String line) throws Exception {
+			String[] token = SPACE.split(line);
+			double[] point = new double[token.length - 1];
+			for (int i = 0; i < token.length - 1; ++i) {
+				point[i] = Double.parseDouble(token[i]);
+			}
+			return new Vectors.dense(point);
+		}
+	}	
 	// END EXTRA TODO
 
     public static void main(String[] args) {
@@ -60,12 +71,12 @@ public final class RandomForestMP {
 
 		// TODO
 		JavaRDD<LabeledPoint> training = sc.textFile(training_data_path).map(new DataToPoint());
-		JavaRDD<Vector> test = sc.textFile(test_data_path).map(new DataToPoint())
-														.map(new Function<LabeledPoint>() {
-																public Vector call(LabeledPoint testPoint) {
-																	return testPoint.features();
-																}   
-															});
+		JavaRDD<Vector> test = sc.textFile(test_data_path)	.map(new DataToFeatureVector);
+								//.map(new DataToPoint()).map(new Function<LabeledPoint>() {
+								//								public Vector call(LabeledPoint testPoint) {
+								//									return testPoint.features();
+								//								}   
+								//							});
 		
 		model = RandomForest.trainClassifier(training, numClasses, categoricalFeaturesInfo, 
 											numTrees, featureSubsetStrategy, impurity, 
