@@ -17,7 +17,8 @@ import java.util.regex.Pattern;
 public final class RandomForestMP {
 	
 	// EXTRA TODO: We need to implement Parsing class
-	/*private static class DataToPoint implements Function<String, LabeledPoint> {
+	// Training data is type of LabeledPoint, thus implement DataToPoint
+	private static class DataToPoint implements Function<String, LabeledPoint> {
 		private static final Pattern SPACE = Pattern.compile(",");
 		
 		public LabeledPoint call(String line) throws Exception {
@@ -30,6 +31,8 @@ public final class RandomForestMP {
 			return new LabeledPoint(label, Vectors.dense(point));
 		}
 	}
+	// Test data requires to be type of Vector, thus implement DataToFeatureVector
+	
 	// END EXTRA TODO
 
     public static void main(String[] args) {
@@ -57,7 +60,7 @@ public final class RandomForestMP {
 
 		// TODO
 		JavaRDD<LabeledPoint> training = sc.textFile(training_data_path).map(new DataToPoint());
-		JavaRDD<LabeledPoint> test = sc.textFile(test_data_path).map(new DataToPoint());
+		JavaRDD<Vector> test = sc.textFile(test_data_path).map(new DataToPoint().features());
 		
 		model = RandomForest.trainClassifier(training, numClasses, categoricalFeaturesInfo, 
 											numTrees, featureSubsetStrategy, impurity, 
@@ -74,6 +77,6 @@ public final class RandomForestMP {
         results.saveAsTextFile(results_path);
 
         sc.stop();
-    } */
+    } 
 
 }
