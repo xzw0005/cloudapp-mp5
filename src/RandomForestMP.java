@@ -35,7 +35,7 @@ public final class RandomForestMP {
 	private static class DataToFeatureVector implements Function<String, Vector> {
 		private static final Pattern SPACE = Pattern.compile(",");
 		
-		public Vector call(String line) throws Exception {
+		public Vector call(String line) {
 			String[] token = SPACE.split(line);
 			double[] point = new double[token.length - 1];
 			for (int i = 0; i < token.length - 1; ++i) {
