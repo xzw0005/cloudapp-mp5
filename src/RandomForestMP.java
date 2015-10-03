@@ -11,6 +11,7 @@ import org.apache.spark.mllib.tree.model.RandomForestModel;
 import org.apache.spark.mllib.tree.RandomForest;
 
 import scala.Tuple2;
+import 
 
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -72,12 +73,12 @@ public final class RandomForestMP {
 
 		// TODO
 		JavaRDD<LabeledPoint> training = sc.textFile(training_data_path).map(new DataToPoint());
-		JavaRDD<Vector> test = sc.textFile(test_data_path)	.map(new DataToFeatureVector());
-								//.map(new DataToPoint()).map(new Function<LabeledPoint>() {
-								//								public Vector call(LabeledPoint testPoint) {
-								//									return testPoint.features();
-								//								}   
-								//							});
+		JavaRDD<Vector> test = sc.textFile(test_data_path)	//.map(new DataToFeatureVector());
+								.map(new DataToPoint()).map(new Function<Vector>() {
+																public Vector call(LabeledPoint testPoint) {
+																	return testPoint.features();
+																}   
+															});
 		
 		model = RandomForest.trainClassifier(training, numClasses, categoricalFeaturesInfo, 
 											numTrees, featureSubsetStrategy, impurity, 
