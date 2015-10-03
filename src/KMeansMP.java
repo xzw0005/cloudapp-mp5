@@ -16,6 +16,7 @@ import scala.Tuple2;
 
 
 public final class KMeansMP {
+
 	// TODO
 	
 	private static class ParsePoint implements Function<String, Vector> {
@@ -40,17 +41,17 @@ public final class KMeansMP {
 		}
 	}
 	
-	private static class WriteCluster implements VoidFunction<Tuple2<Integer, Iterable<String>>> {
+	private static class PrintCluster implements VoidFunction<Tuple2<Integer, Iterable<String>>> {
 		private KMeansModel model;
-		public WriteCluster(KMeansModel model) {
+		public PrintCluster(KMeansModel model) {
 			this.model = model;
 		}
-		public String call(Tuple2<Integer, Iterable<String>>Cars) throws Exception {
+		public void call(Tuple2<Integer, Iterable<String>>Cars) throws Exception {
 			String ret = "[";
 			for (String car : Cars._2()) {
 				ret += car + ",";
 			}
-			return ret + "]";
+			System.out.println(ret + "]");
 		}
 	}
 	
@@ -96,8 +97,8 @@ public final class KMeansMP {
 		
 		model = KMeans.train(points.rdd(), k, iterations, runs, KMeans.RANDOM(), seed);
 		
-		JavaPairRDD<Integer, Iterable<String>> cao = titles.zip(points).mapToPair(new ClusterCars(model)).groupByKey();
-		results = cao.foreach(new WriteCluster(model));
+		JavaPairRDD<Integer, Iterable<String>> results = titles.zip(points).mapToPair(new ClusterCars(model)).groupByKey();
+		results.foreach(new PrintCluster(model));
 		//END TODO
 
         results.saveAsTextFile(results_path);
