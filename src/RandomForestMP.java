@@ -71,7 +71,7 @@ public final class RandomForestMP {
 
 		// TODO
 		JavaRDD<LabeledPoint> training = sc.textFile(training_data_path).map(new DataToPoint());
-		JavaRDD<Vector> test = sc.textFile(test_data_path)	.map(new DataToFeatureVector);
+		JavaRDD<Vector> test = sc.textFile(test_data_path)	.map(new DataToFeatureVector());
 								//.map(new DataToPoint()).map(new Function<LabeledPoint>() {
 								//								public Vector call(LabeledPoint testPoint) {
 								//									return testPoint.features();
