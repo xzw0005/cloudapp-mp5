@@ -11,7 +11,6 @@ import org.apache.spark.mllib.tree.model.RandomForestModel;
 import org.apache.spark.mllib.tree.RandomForest;
 
 import scala.Tuple2;
-import 
 
 import java.util.HashMap;
 import java.util.regex.Pattern;
