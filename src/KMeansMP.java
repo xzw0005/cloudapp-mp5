@@ -12,6 +12,7 @@ import org.apache.spark.mllib.clustering.KMeans;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
+
 import scala.Tuple2;
 
 
@@ -25,7 +26,7 @@ public final class KMeansMP {
 		public Vector call(String line) {
 			String[] token = SPACE.split(line);
 			double[] point = new double[token.length - 1];
-			for (int i = 0; i < token.length; ++i) {
+			for (int i = 1; i < token.length; ++i) {
 				point[i - 1] = Double.parseDouble(token[i]);
 			}
 			return Vectors.dense(point);
@@ -46,7 +47,7 @@ public final class KMeansMP {
 		public PrintCluster(KMeansModel model) {
 			this.model = model;
 		}
-		public void call(Tuple2<Integer, Iterable<String>>Cars) throws Exception {
+		public void call(Tuple2<Integer, Iterable<String>> Cars) throws Exception {
 			String ret = "[";
 			for (String car : Cars._2()) {
 				ret += car + ", ";

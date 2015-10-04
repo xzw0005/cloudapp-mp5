@@ -31,5 +31,31 @@ public class ShortestPathsComputation extends BasicComputation<
   public void compute(
       Vertex<IntWritable, IntWritable, NullWritable> vertex,
       Iterable<IntWritable> messages) throws IOException {
+		// TODO
+		if (getSuperstep() == 0) {
+			vertex.setValue(new IntWritable(Integer.MAX_VALUE));
+		}
+		
+		// Reference: http://giraph.apache.org/intro.html
+		Integer minDist = isSource(vertex)? 0 : Integer.MAX_VALUE;
+		 
+		for (IntWritable msg : messages) {
+			if (msg.get() < minDist) {
+				minDist = msg.get();
+			}
+		}
+		  
+		if (minDist < vertex.getValue().get()) {
+			vertex.setValue(new IntWritable(minDist));
+			for (Edge<IntWritable, NullWritable> edge : vertex.getEdges()) {
+				IntWritable neighbor = edge.getTargetVertexId();
+				Integer distance = minDist + 1;
+				//Integer distance = minDist + edge.getValue().get();
+				sendMessage(neighbor, new IntWritable(distance));
+			}
+		}  
+
+		vertex.voteToHalt();		
+		// END TODO
   }
 }
