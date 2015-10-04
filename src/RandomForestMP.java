@@ -30,19 +30,20 @@ public final class RandomForestMP {
 			return new LabeledPoint(label, Vectors.dense(point));
 		}
 	}
-	// Test data requires to be type of Vector, thus implement DataToFeatureVector
-	private static class DataToFeatureVector implements Function<String, Vector> {
+	// Test data requires to be type of Vector, thus implement ParsePoint
+	private static class ParsePoint implements Function<String, Vector> {
 		private static final Pattern SPACE = Pattern.compile(",");
 		
-		public Vector call(String line) throws Exception {
+		public Vector call(String line) {
 			String[] token = SPACE.split(line);
 			double[] point = new double[token.length - 1];
-			for (int i = 0; i < token.length - 1; ++i) {
-				point[i] = Double.parseDouble(token[i]);
+			for (int i = 0; i < token.length; ++i) {
+				point[i - 1] = Double.parseDouble(token[i]);
 			}
 			return Vectors.dense(point);
 		}
-	}	
+	}
+	
 	// END EXTRA TODO
 
     public static void main(String[] args) {
@@ -70,7 +71,7 @@ public final class RandomForestMP {
 
 		// TODO
 		JavaRDD<LabeledPoint> training = sc.textFile(training_data_path).map(new DataToPoint());
-		JavaRDD<Vector> test = sc.textFile(test_data_path).map(new DataToFeatureVector());
+		JavaRDD<Vector> test = sc.textFile(test_data_path).map(new ParsePoint());
 								//.map(new DataToPoint()).map(new Function<Vector>() {
 								//								public Vector call(LabeledPoint testPoint) {
 								//									return testPoint.features();
